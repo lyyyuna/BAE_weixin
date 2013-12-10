@@ -64,10 +64,14 @@ def response_msg():
                 <FuncFlag>1</FuncFlag>
                 </xml> """
 
-
+    if msg["MsgType"] == "event":
+        echostr = textTpl % (
+            msg['FromUserName'], msg['ToUserName'], str(int(time.time())), msg['MsgType'],
+            u"欢迎关注豆瓣电影，输入电影名称即可快速查询电影讯息哦！")
+        return echostr
     echostr = textTpl % (
         msg['FromUserName'], msg['ToUserName'], str(int(time.time())), msg['MsgType'],
-            u"欢迎关注豆瓣电影，输入电影名称即可快速查询电影讯息哦！")
+            u"还在完善功能中。。。。。")
     return echostr
 
 
