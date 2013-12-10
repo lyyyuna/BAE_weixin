@@ -11,7 +11,7 @@ import json
  
 @get("/")
 def checkSignature():
-    token = "*******"  
+    token = "sugar"  
     signature = request.GET.get('signature', None)
     timestamp = request.GET.get('timestamp', None)
     nonce = request.GET.get('nonce', None)
