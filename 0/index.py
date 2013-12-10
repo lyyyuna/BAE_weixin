@@ -25,6 +25,51 @@ def checkSignature():
     else:
         return None
  
+def parse_msg():
+    recvmsg = request.body.read()
+    root = ET.fromstring(recvmsg)
+    msg = {}
+    for child in root:
+        msg[child.tag] = child.text
+    return msg 
+ 
+@post("/")
+def response_msg():
+
+    msg = parse_msg()
+
+    textTpl = """<xml>
+             <ToUserName><![CDATA[%s]]></ToUserName>
+             <FromUserName><![CDATA[%s]]></FromUserName>
+             <CreateTime>%s</CreateTime>
+             <MsgType><![CDATA[%s]]></MsgType>
+             <Content><![CDATA[%s]]></Content>
+             <FuncFlag>0</FuncFlag>
+             </xml>"""
+
+    pictextTpl = """<xml>
+                <ToUserName><![CDATA[%s]]></ToUserName>
+                <FromUserName><![CDATA[%s]]></FromUserName>
+                <CreateTime>%s</CreateTime>
+                <MsgType><![CDATA[news]]></MsgType>
+                <ArticleCount>1</ArticleCount>
+                <Articles>
+                <item>
+                <Title><![CDATA[%s]]></Title>
+                <Description><![CDATA[%s]]></Description>
+                <PicUrl><![CDATA[%s]]></PicUrl>
+                <Url><![CDATA[%s]]></Url>
+                </item>
+                </Articles>
+                <FuncFlag>1</FuncFlag>
+                </xml> """
+
+
+    echostr = textTpl % (
+        msg['FromUserName'], msg['ToUserName'], str(int(time.time())), msg['MsgType'],
+            u"欢迎关注豆瓣电影，输入电影名称即可快速查询电影讯息哦！")
+    return echostr
+
 
 # Mod WSGI launch
 from bae.core.wsgi import WSGIApplication
